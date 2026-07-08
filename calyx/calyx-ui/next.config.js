@@ -1,8 +1,6 @@
 const { withSentryConfig } = require("@sentry/nextjs");
 
-const isSentryDisabled =
-  process.env.SENTRY_DISABLED === "true" ||
-  process.env.NODE_ENV === "development";
+const isSentryDisabled = true;
 
 // Turbopack doesn't support dynamic imports yet, so we need to fallback to CDN for development
 // Checking NODE_ENV because in the future we may use turbopack in production as well
