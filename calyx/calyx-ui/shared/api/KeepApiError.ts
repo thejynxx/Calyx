@@ -12,7 +12,7 @@ export class KeepApiError extends Error {
     statusCode?: number
   ) {
     super(message);
-    this.name = "KeepApiError";
+    this.name = "CalyxApiError";
     this.url = url;
     this.proposedResolution = proposedResolution;
     this.statusCode = statusCode;
@@ -33,16 +33,16 @@ export class KeepApiReadOnlyError extends KeepApiError {
     statusCode?: number
   ) {
     super(message, url, proposedResolution, responseJson, statusCode);
-    this.name = "KeepReadOnlyError";
+    this.name = "CalyxReadOnlyError";
   }
 }
 
 export class KeepApiHealthError extends KeepApiError {
   constructor(message: string = "API server is not available") {
     const proposedResolution =
-      "Check if the Keep backend is running and API_URL is correct.";
+      "Check if the Calyx backend is running and API_URL is correct.";
     super(message, "", proposedResolution, {}, 503);
-    this.name = "KeepApiHealthError";
+    this.name = "CalyxApiHealthError";
     this.message = message;
   }
 

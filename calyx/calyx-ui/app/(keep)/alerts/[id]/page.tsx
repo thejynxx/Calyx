@@ -15,6 +15,6 @@ export default async function Page(props: PageProps) {
 }
 
 export const metadata = {
-  title: "Keep - Alerts",
+  title: "Calyx - Alerts",
   description: "Single pane of glass for all your alerts.",
 };

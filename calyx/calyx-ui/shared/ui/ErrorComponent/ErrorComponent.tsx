@@ -8,7 +8,6 @@ import { useEffect, useMemo } from "react";
 import { Title, Subtitle } from "@tremor/react";
 import { Button, Text } from "@tremor/react";
 import { KeepApiError } from "@/shared/api";
-import * as Sentry from "@sentry/nextjs";
 import { useSignOut } from "@/shared/lib/hooks/useSignOut";
 import { KeepApiHealthError } from "@/shared/api/KeepApiError";
 import { useHealth } from "@/shared/lib/hooks/useHealth";
@@ -31,11 +30,7 @@ export function ErrorComponent({
   const { data: config } = useConfig();
 
   const contactUsUrl =
-    config?.KEEP_CONTACT_US_URL || "https://slack.keephq.dev/";
-
-  useEffect(() => {
-    Sentry.captureException(originalError);
-  }, [originalError]);
+    config?.KEEP_CONTACT_US_URL || "https://github.com/thejynxx/Calyx";
 
   const error = useMemo(() => {
     return isHealthy ? originalError : new KeepApiHealthError();
@@ -99,7 +94,7 @@ export function ErrorComponent({
           variant="secondary"
           onClick={() => window.open(contactUsUrl, "_blank")}
         >
-          {contactUsUrl.includes("slack") ? "Slack Us" : "Mail Us"}
+          {contactUsUrl.includes("github") ? "GitHub Support" : "Support"}
         </Button>
       </div>
     </div>

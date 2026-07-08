@@ -2,8 +2,8 @@ import { Card, Text } from "@tremor/react";
 import Image from "next/image";
 
 export const metadata = {
-  title: "Keep",
-  description: "The open-source alert management and AIOps platform",
+  title: "Calyx",
+  description: "The standalone alert management and AIOps platform",
 };
 
 export default function RootLayout({
@@ -17,16 +17,9 @@ export default function RootLayout({
         <div className="min-h-screen flex items-center justify-center bg-tremor-background-subtle p-4">
           <div className="flex flex-col items-center gap-6">
             <div className="flex items-center gap-3">
-              <Image
-                src="/keep_big.svg"
-                alt="Keep Logo"
-                width={48}
-                height={48}
-                priority
-                className="object-contain h-full"
-              />
-              <Text className="text-tremor-title font-bold text-tremor-content-strong">
-                Keep
+              <span className="text-3xl animate-spin" style={{ animationDuration: '6s' }}>🌀</span>
+              <Text className="text-tremor-title font-bold text-tremor-content-strong text-2xl">
+                Calyx
               </Text>
             </div>
             <Card
