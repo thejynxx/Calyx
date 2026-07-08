@@ -338,7 +338,7 @@ export default function CalyxDashboard() {
                               : "bg-emerald-50 text-emerald-600 dark:bg-emerald-950/20 dark:text-emerald-500"
                           }`}
                         >
-                          {alert.status.toUpperCase()}
+                          {(alert.status || "active").toUpperCase()}
                         </span>
                       </td>
                       <td className="py-4 px-5 text-right space-x-2">

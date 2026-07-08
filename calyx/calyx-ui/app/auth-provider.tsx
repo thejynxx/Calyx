@@ -20,5 +20,5 @@ export const NextAuthProvider = ({ children, session }: Props) => {
     window.__NEXT_AUTH_SESSION__ = session;
   }
 
-  return <SessionProvider>{children}</SessionProvider>;
+  return <SessionProvider session={session}>{children}</SessionProvider>;
 };

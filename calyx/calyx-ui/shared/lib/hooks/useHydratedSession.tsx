@@ -29,9 +29,9 @@ export function useHydratedSession() {
     return {
       data: window.__NEXT_AUTH.session,
       status: "authenticated" as const,
-      update: session.update,
+      update: session?.update,
     };
   }
 
-  return session;
+  return session || { data: null, status: "unauthenticated" };
 }
