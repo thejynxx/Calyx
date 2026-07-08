@@ -20,8 +20,8 @@ export function getConfig(): InternalConfig {
     // Keep the auth type if it's a valid enum value
     authType = authType as AuthType;
   } else {
-    // Default to NOAUTH
-    authType = AuthType.NOAUTH;
+    // Default to DB
+    authType = AuthType.DB;
   }
 
   // we want to support preview branches on vercel

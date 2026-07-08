@@ -95,27 +95,13 @@ export const UserInfo = ({ session }: UserInfoProps) => {
     <>
       <ul className="space-y-2 p-2">
         <li>
-          <LinkWithIcon href="/providers" icon={VscDebugDisconnect}>
-            <Subtitle className="text-xs">Providers</Subtitle>
-          </LinkWithIcon>
-        </li>
-        <li className="flex text-xs items-center gap-2">
-          <LinkWithIcon
-            icon={FaSlack}
-            href="https://slack.keephq.dev/"
-            className="w-auto pr-3.5"
-            target="_blank"
-          >
-            Slack
-          </LinkWithIcon>
           <LinkWithIcon
             icon={HiOutlineDocumentText}
             iconClassName="w-4"
-            href={docsUrl}
-            className="w-auto px-3.5"
-            target="_blank"
+            href="/aiops/guide"
+            className="w-full"
           >
-            Docs
+            User Guide
           </LinkWithIcon>
         </li>
         <div className="flex items-center gap-2">

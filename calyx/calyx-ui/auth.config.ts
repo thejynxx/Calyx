@@ -43,7 +43,9 @@ export const authType =
       ? AuthType.DB
       : authTypeEnv === NO_AUTH
         ? AuthType.NOAUTH
-        : (authTypeEnv as AuthType);
+        : Object.values(AuthType).includes(authTypeEnv as AuthType)
+          ? (authTypeEnv as AuthType)
+          : AuthType.DB;
 
 export const proxyUrl =
   process.env.HTTP_PROXY ||

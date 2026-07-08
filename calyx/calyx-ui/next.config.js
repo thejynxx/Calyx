@@ -125,7 +125,7 @@ const nextConfig = {
       : [
           {
             source: "/",
-            destination: "/incidents",
+            destination: "/aiops/dashboard",
             permanent: process.env.ENV === "production",
           },
           ...workflowRawYamlRedirects,

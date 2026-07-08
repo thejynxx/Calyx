@@ -32,61 +32,51 @@ import { useConfig } from "utils/hooks/useConfig";
 import { Session } from "next-auth";
 import { signIn } from "next-auth/react";
 import KeepPng from "../../keep.png";
+import {
+  RiDashboardLine,
+  RiFileSearchLine,
+  RiListSettingsLine,
+  RiBookOpenLine,
+  RiSettings3Line,
+  RiSparkling2Line,
+} from "react-icons/ri";
 
 const NAVIGATION_OPTIONS = [
   {
-    icon: VscDebugDisconnect,
-    label: "Go to the providers page",
-    shortcut: ["p"],
-    navigate: "/providers",
+    icon: RiDashboardLine,
+    label: "Go to Calyx Dashboard",
+    shortcut: ["d"],
+    navigate: "/aiops/dashboard",
   },
   {
-    icon: AiOutlineAlert,
-    label: "Go to alert console",
+    icon: RiFileSearchLine,
+    label: "Go to Log Analyzer",
+    shortcut: ["la"],
+    navigate: "/aiops/analyzer",
+  },
+  {
+    icon: RiListSettingsLine,
+    label: "Go to Rule Builder",
+    shortcut: ["r"],
+    navigate: "/aiops/rules",
+  },
+  {
+    icon: RiSparkling2Line,
+    label: "Go to AI Correlation",
+    shortcut: ["c"],
+    navigate: "/aiops/ai-correlation",
+  },
+  {
+    icon: RiBookOpenLine,
+    label: "Go to User Guide",
     shortcut: ["g"],
-    navigate: "/alerts/feed",
+    navigate: "/aiops/guide",
   },
   {
-    icon: AiOutlineGroup,
-    label: "Go to alert quality",
-    shortcut: ["q"],
-    navigate: "/alerts/quality",
-  },
-  {
-    icon: MdOutlineEngineering,
-    label: "Go to alert groups",
-    shortcut: ["g"],
-    navigate: "/rules",
-  },
-  {
-    icon: LuWorkflow,
-    label: "Go to the workflows page",
-    shortcut: ["wf"],
-    navigate: "/workflows",
-  },
-  {
-    icon: UserGroupIcon,
-    label: "Go to users management",
-    shortcut: ["u"],
-    navigate: "/settings?selectedTab=users",
-  },
-  {
-    icon: GlobeAltIcon,
-    label: "Go to generic webhook",
-    shortcut: ["w"],
-    navigate: "/settings?selectedTab=webhook",
-  },
-  {
-    icon: EnvelopeIcon,
-    label: "Go to SMTP settings",
+    icon: RiSettings3Line,
+    label: "Go to Engine Settings",
     shortcut: ["s"],
-    navigate: "/settings?selectedTab=smtp",
-  },
-  {
-    icon: KeyIcon,
-    label: "Go to API key",
-    shortcut: ["a"],
-    navigate: "/settings?selectedTab=users&userSubTab=api-keys",
+    navigate: "/aiops/settings",
   },
 ];
 
@@ -108,28 +98,7 @@ export const Search = ({ session }: SearchProps) => {
     console.log("Search component session:", session);
   }, [session]);
 
-  const EXTERNAL_OPTIONS = [
-    {
-      icon: FileTextIcon,
-      label: "Keep Docs",
-      shortcut: ["⇧", "D"],
-      navigate: docsUrl,
-    },
-    {
-      icon: GitHubLogoIcon,
-      label: "Keep Source code",
-      shortcut: ["⇧", "C"],
-      navigate: "https://github.com/keephq/keep",
-    },
-    {
-      icon: TwitterLogoIcon,
-      label: "Keep Twitter",
-      shortcut: ["⇧", "T"],
-      navigate: "https://twitter.com/keepalerting",
-    },
-  ];
-
-  const OPTIONS = [...NAVIGATION_OPTIONS, ...EXTERNAL_OPTIONS];
+  const OPTIONS = NAVIGATION_OPTIONS;
 
   useEffect(() => {
     const down = (e: KeyboardEvent) => {
@@ -251,31 +220,6 @@ export const Search = ({ session }: SearchProps) => {
             <Subtitle>Navigate</Subtitle>
           </ListItem>
           {NAVIGATION_OPTIONS.map((option) => (
-            <ComboboxOption
-              key={option.label}
-              as={Fragment}
-              value={option.navigate}
-            >
-              {({ active }) => (
-                <ListItem className="flex items-center justify-start space-x-3 cursor-default select-none p-2 ui-active:bg-orange-400 ui-active:text-white ui-not-active:text-gray-900">
-                  <Icon
-                    className={`py-2 px-0 ${
-                      active ? "bg-orange-400 text-white" : "text-gray-900"
-                    }`}
-                    icon={option.icon}
-                    color="orange"
-                  />
-                  <span className="text-left">{option.label}</span>
-                </ListItem>
-              )}
-            </ComboboxOption>
-          ))}
-        </List>
-        <List>
-          <ListItem className="pl-2">
-            <Subtitle>External Sources</Subtitle>
-          </ListItem>
-          {EXTERNAL_OPTIONS.map((option) => (
             <ComboboxOption
               key={option.label}
               as={Fragment}
