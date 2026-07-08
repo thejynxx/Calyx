@@ -214,9 +214,209 @@ def parse_log_line(line: str) -> dict:
         "raw": line
     }
 def fetch_keep_alerts() -> list:
-    return []
+    possible_paths = [
+        "../calyx/live_alerts.db",
+        "../calyx/keep/live_alerts.db",
+        "./calyx/live_alerts.db",
+        "../keep/live_alerts.db",
+        "../keep/keep/live_alerts.db",
+        "./live_alerts.db",
+        "../live_alerts.db",
+        "./keep/live_alerts.db",
+    ]
+    db_path = None
+    for path in possible_paths:
+        abs_path = os.path.abspath(path)
+        if os.path.exists(abs_path):
+            db_path = abs_path
+            break
+            
+    if not db_path:
+        return []
+        
+    alerts = []
+    conn = None
+    try:
+        conn = sqlite3.connect(f"file:{db_path}?mode=ro", uri=True)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        
+        cursor.execute("""
+            SELECT 
+                a.id, 
+                a.timestamp, 
+                a.provider_type, 
+                a.provider_id, 
+                a.event, 
+                a.fingerprint,
+                ae.enrichments
+            FROM alert a
+            LEFT JOIN alertenrichment ae 
+                ON a.fingerprint = ae.alert_fingerprint 
+                AND a.tenant_id = ae.tenant_id
+            ORDER BY a.timestamp DESC 
+            LIMIT 100
+        """)
+        rows = cursor.fetchall()
+        for row in rows:
+            event_json = row["event"]
+            event_data = {}
+            if event_json:
+                try:
+                    event_data = json.loads(event_json)
+                except Exception:
+                    pass
+            
+            message = (
+                event_data.get("message")
+                or event_data.get("description")
+                or event_data.get("summary")
+                or event_data.get("title")
+                or f"Alert from {row['provider_type']}"
+            )
+            
+            severity = str(
+                event_data.get("severity")
+                or event_data.get("level")
+                or "INFO"
+            ).upper()
+            if severity == "WARN":
+                severity = "WARNING"
+                
+            status = "active"
+            ae_json = row["enrichments"]
+            if ae_json:
+                try:
+                    ae_data = json.loads(ae_json)
+                    status = ae_data.get("status") or "active"
+                except Exception:
+                    pass
+            if status not in ["active", "acknowledged", "resolved"]:
+                status = "active"
+                
+            ts_str = row["timestamp"]
+            ts = datetime.datetime.utcnow()
+            if ts_str:
+                try:
+                    if " " in ts_str:
+                        ts = datetime.datetime.strptime(ts_str.split(".")[0], "%Y-%m-%d %H:%M:%S")
+                    elif "T" in ts_str:
+                        ts = datetime.datetime.fromisoformat(ts_str.replace("Z", "+00:00")).replace(tzinfo=None)
+                except Exception:
+                    pass
+                    
+            alerts.append({
+                "id": str(row["id"]),
+                "rule_name": f"Live: {row['provider_type'].upper()}",
+                "severity": severity,
+                "message": message,
+                "timestamp": ts,
+                "log_snippet": json.dumps(event_data, indent=2),
+                "status": status
+            })
+    except Exception as e:
+        print(f"Error fetching keep alerts: {e}")
+    finally:
+        if conn:
+            conn.close()
+            
+    return alerts
 
 def update_keep_alert_status(alert_id: str, status: str) -> Optional[dict]:
+    possible_paths = [
+        "../calyx/live_alerts.db",
+        "../calyx/keep/live_alerts.db",
+        "./calyx/live_alerts.db",
+        "../keep/live_alerts.db",
+        "../keep/keep/live_alerts.db",
+        "./live_alerts.db",
+        "../live_alerts.db",
+        "./keep/live_alerts.db",
+    ]
+    db_path = None
+    for path in possible_paths:
+        abs_path = os.path.abspath(path)
+        if os.path.exists(abs_path):
+            db_path = abs_path
+            break
+            
+    if not db_path:
+        return None
+        
+    conn = None
+    try:
+        conn = sqlite3.connect(db_path)
+        conn.row_factory = sqlite3.Row
+        cursor = conn.cursor()
+        
+        cursor.execute("SELECT tenant_id, fingerprint, provider_type, event FROM alert WHERE id = ?", (alert_id,))
+        alert_row = cursor.fetchone()
+        if not alert_row:
+            return None
+            
+        tenant_id = alert_row["tenant_id"]
+        fingerprint = alert_row["fingerprint"]
+        provider_type = alert_row["provider_type"]
+        event_json = alert_row["event"]
+        
+        event_data = {}
+        if event_json:
+            try:
+                event_data = json.loads(event_json)
+            except Exception:
+                pass
+                
+        cursor.execute("SELECT id, enrichments FROM alertenrichment WHERE tenant_id = ? AND alert_fingerprint = ?", (tenant_id, fingerprint))
+        enrich_row = cursor.fetchone()
+        
+        if enrich_row:
+            enrich_id = enrich_row["id"]
+            enrichments_json = enrich_row["enrichments"]
+            enrichments = {}
+            if enrichments_json:
+                try:
+                    enrichments = json.loads(enrichments_json)
+                except Exception:
+                    pass
+            enrichments["status"] = status
+            cursor.execute(
+                "UPDATE alertenrichment SET enrichments = ?, timestamp = ? WHERE id = ?",
+                (json.dumps(enrichments), datetime.datetime.utcnow().isoformat(), enrich_id)
+            )
+        else:
+            enrich_id = str(uuid.uuid4())
+            enrichments = {"status": status}
+            cursor.execute(
+                "INSERT INTO alertenrichment (id, tenant_id, timestamp, alert_fingerprint, enrichments) VALUES (?, ?, ?, ?, ?)",
+                (enrich_id, tenant_id, datetime.datetime.utcnow().isoformat(), fingerprint, json.dumps(enrichments))
+            )
+            
+        conn.commit()
+        
+        message = (
+            event_data.get("message")
+            or event_data.get("description")
+            or event_data.get("summary")
+            or event_data.get("title")
+            or f"Alert from {provider_type}"
+        )
+        return {
+            "id": alert_id,
+            "rule_name": f"Live: {provider_type.upper()}",
+            "severity": event_data.get("severity") or "INFO",
+            "message": message,
+            "timestamp": datetime.datetime.utcnow(),
+            "log_snippet": json.dumps(event_data, indent=2),
+            "status": status
+        }
+    except Exception as e:
+        print(f"Error updating keep alert status: {e}")
+        if conn:
+            conn.rollback()
+    finally:
+        if conn:
+            conn.close()
+            
     return None
 
 

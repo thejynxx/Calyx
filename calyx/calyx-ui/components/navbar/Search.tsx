@@ -39,12 +39,14 @@ import {
   RiBookOpenLine,
   RiSettings3Line,
   RiSparkling2Line,
+  RiShieldFlashLine,
 } from "react-icons/ri";
 
 const NAVIGATION_OPTIONS = [
+  // Calyx AIOps
   {
     icon: RiDashboardLine,
-    label: "Go to Calyx Dashboard",
+    label: "Go to Calyx AIOps Dashboard",
     shortcut: ["d"],
     navigate: "/aiops/dashboard",
   },
@@ -77,6 +79,55 @@ const NAVIGATION_OPTIONS = [
     label: "Go to Engine Settings",
     shortcut: ["s"],
     navigate: "/aiops/settings",
+  },
+  // Calyx Platform
+  {
+    icon: AiOutlineAlert,
+    label: "Go to Alerts Feed",
+    shortcut: ["al"],
+    navigate: "/alerts/feed",
+  },
+  {
+    icon: RiShieldFlashLine,
+    label: "Go to Incidents Dashboard",
+    shortcut: ["i"],
+    navigate: "/incidents",
+  },
+  {
+    icon: VscDebugDisconnect,
+    label: "Go to Platform Integrations",
+    shortcut: ["in"],
+    navigate: "/providers",
+  },
+  {
+    icon: LuWorkflow,
+    label: "Go to Workflows Management",
+    shortcut: ["w"],
+    navigate: "/workflows",
+  },
+  {
+    icon: UserGroupIcon,
+    label: "Go to Users Management",
+    shortcut: ["u"],
+    navigate: "/settings?selectedTab=users",
+  },
+  {
+    icon: GlobeAltIcon,
+    label: "Go to Generic Webhook Config",
+    shortcut: ["wh"],
+    navigate: "/settings?selectedTab=webhook",
+  },
+  {
+    icon: EnvelopeIcon,
+    label: "Go to SMTP Settings",
+    shortcut: ["sm"],
+    navigate: "/settings?selectedTab=smtp",
+  },
+  {
+    icon: KeyIcon,
+    label: "Go to API Key Access",
+    shortcut: ["ak"],
+    navigate: "/settings?selectedTab=users&userSubTab=api-keys",
   },
 ];
 

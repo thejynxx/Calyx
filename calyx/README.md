@@ -28,6 +28,73 @@ Calyx queries AI models directly using API keys you store privately in local bro
 
 ---
 
+## Rebranded Connectors & Integrations
+
+Calyx Platform includes native integrations to collect alerts, automate ticketing, and trigger notifications across 80+ tools.
+
+### Observability & Monitoring
+* **APM & Metrics:** Datadog, Prometheus, New Relic, Dynatrace, AppDynamics, Grafana, VictoriaMetrics.
+* **Logs & Traces:** Grafana Loki, Elasticsearch, OpenSearch, Graylog, Kibana, ClickHouse.
+* **Error Tracking:** Sentry, Rollbar, Axiom, Parseable.
+
+### Communication & Notification Channels
+* Slack, Microsoft Teams, Google Chat, Discord, Telegram, Twilio, SMTP.
+
+### Ticketing & Incident Management
+* Jira, ServiceNow, GitHub Issues, GitLab Issues, Trello, PagerDuty, OpsGenie, Incident.io.
+
+### Infrastructure & Container Orchestration
+* Kubernetes, ArgoCD, Flux CD, AKS, GKE, GKE, Bash, Python, Webhooks.
+
+---
+
+## Declarative Calyx Workflows (YAML)
+
+Calyx supports running automated alert correlation, routing, and incident remediation workflows. You can define them as declarative YAML files in your repository.
+
+Here is an example workflow that creates a Jira ticket and routes a Slack message for critical alerts:
+
+```yaml
+workflow:
+  id: sentry-critical-tickets
+  description: Auto-create ticket and notify teams for Sentry critical alerts
+  triggers:
+    - type: alert
+      filters:
+        - key: source
+          value: sentry
+        - key: severity
+          value: critical
+        # Regex service matching
+        - key: service
+          value: r"(payments|checkout)"
+  actions:
+    - name: notify-slack-payments-channel
+      if: "'{{ alert.service }}' == 'payments'"
+      provider:
+        type: slack
+        config: "{{ providers.payments-slack }}"
+        with:
+          message: "Calyx Alert: {{ alert.name }} - {{ alert.description }}"
+    - name: create-jira-ticket
+      if: "'{{ alert.service }}' == 'checkout' and not '{{ alert.ticket_id }}'"
+      provider:
+        type: jira
+        config: "{{ providers.engineering-jira }}"
+        with:
+          board_name: "Engineering Support"
+          issuetype: "Bug"
+          summary: "[Calyx Auto] Sentry Alert: {{ alert.name }}"
+          description: "Root Cause Investigation: {{ alert.description }}"
+          enrich_alert:
+            - key: ticket_id
+              value: results.issue.key
+            - key: ticket_url
+              value: results.ticket_url
+```
+
+---
+
 ## Getting Started
 
 Calyx is structured into a Python FastAPI backend and a Next.js (React) frontend.

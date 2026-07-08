@@ -12,7 +12,12 @@ import {
   RiBookOpenLine,
   RiSettings3Line,
   RiSparkling2Line,
+  RiAlertLine,
+  RiShieldFlashLine,
 } from "react-icons/ri";
+import { LuWorkflow } from "react-icons/lu";
+import { VscDebugDisconnect } from "react-icons/vsc";
+import { AiOutlineAlert } from "react-icons/ai";
 import "./Navbar.css";
 
 export default async function NavbarInner() {
@@ -43,6 +48,21 @@ export default async function NavbarInner() {
           </LinkWithIcon>
           <LinkWithIcon href="/aiops/settings" icon={RiSettings3Line}>
             Settings
+          </LinkWithIcon>
+          <div className="px-2 text-xs font-semibold text-gray-400 uppercase tracking-wider mt-6 mb-2">
+            Calyx Platform
+          </div>
+          <LinkWithIcon href="/alerts/feed" icon={AiOutlineAlert}>
+            Alerts Feed
+          </LinkWithIcon>
+          <LinkWithIcon href="/incidents" icon={RiShieldFlashLine}>
+            Incidents
+          </LinkWithIcon>
+          <LinkWithIcon href="/providers" icon={VscDebugDisconnect}>
+            Integrations
+          </LinkWithIcon>
+          <LinkWithIcon href="/workflows" icon={LuWorkflow}>
+            Workflows
           </LinkWithIcon>
         </div>
         <UserInfo session={session} />
