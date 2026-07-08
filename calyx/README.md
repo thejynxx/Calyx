@@ -1,43 +1,6 @@
-<div align="center">
-    <img src="/calyx/keep.png?raw=true" width="100">
-</div>
+# 🌀 Calyx: Standalone AIOps & Log Analyzer
 
-<h1 align="center">Calyx: Standalone AIOps & Log Analyzer</h1>
-
-</br>
-
-<div align="center">A lightweight, AI-driven log management, event correlation, and alert rule builder.
-</br>
-</div>
-
-<div align="center">
-    <a href='http://makeapullrequest.com'>
-      <img alt='PRs Welcome' src='https://img.shields.io/badge/PRs-welcome-brightgreen.svg?style=shields'/></a>
-    <a href="https://github.com/thejynxx/Calyx/commits/main">
-      <img alt="GitHub commit activity" src="https://img.shields.io/github/commit-activity/m/thejynxx/Calyx"/></a>
-</div>
-
-<p align="center">
-    <a href="#key-features">Key Features</a>
-    ·
-    <a href="#supported-ai-backends">AI Backends</a>
-    ·
-    <a href="#getting-started">Getting Started</a>
-    ·
-    <a href="#deployment">Deployment</a>
-</p>
-
-<div style="width: 100%; max-width: 800px; margin: 0 auto;">
-    <img
-        src="/calyx/assets/sneaknew.png?raw=true"
-        style="width: 100%; height: auto; object-fit: contain;"
-        alt="Calyx Standalone UI preview"
-    >
-</div>
-
-<h1 align="center"></h1>
-
-Calyx is an open-source, standalone AIOps and log analytics platform. Built on the core UI and database layouts of [Keep (keephq/keep)](https://github.com/keephq/keep), Calyx is engineered to be **lightweight, dependency-free, and serverless-friendly**. It bypasses heavy legacy databases, Keycloak auth, Redis caches, and message queues in favor of a single-file FastAPI engine and a local SQLite database.
+A lightweight, AI-driven log management, event correlation, and alert rule builder.
 
 ## Key Features
 
@@ -54,46 +17,14 @@ Calyx is an open-source, standalone AIOps and log analytics platform. Built on t
 
 Calyx queries AI models directly using API keys you store privately in local browser settings.
 
-<table>
-<tr>
-    <td align="center" width="150">
-        <a href="https://aistudio.google.com/" target="_blank">
-            <img width="40" src="calyx/calyx-ui/public/icons/gemini-icon.png" alt="Gemini"/><br/>
-            Gemini
-        </a>
-    </td>
-    <td align="center" width="150">
-        <a href="https://platform.openai.com/" target="_blank">
-            <img width="40" src="calyx/calyx-ui/public/icons/openai-icon.png" alt="OpenAI"/><br/>
-            OpenAI
-        </a>
-    </td>
-    <td align="center" width="150">
-        <a href="https://www.anthropic.com/" target="_blank">
-            <img width="40" src="calyx/calyx-ui/public/icons/anthropic-icon.png" alt="Anthropic"/><br/>
-            Anthropic
-        </a>
-    </td>
-    <td align="center" width="150">
-        <a href="https://deepseek.com/" target="_blank">
-            <img width="40" src="calyx/calyx-ui/public/icons/deepseek-icon.png" alt="DeepSeek"/><br/>
-            DeepSeek
-        </a>
-    </td>
-    <td align="center" width="150">
-        <a href="https://ollama.com/" target="_blank">
-            <img width="40" src="calyx/calyx-ui/public/icons/ollama-icon.png" alt="Ollama"/><br/>
-            Ollama
-        </a>
-    </td>
-    <td align="center" width="150">
-        <a href="https://x.ai/" target="_blank">
-            <img width="40" src="calyx/calyx-ui/public/icons/grok-icon.png" alt="Grok"/><br/>
-            Grok
-        </a>
-    </td>
-</tr>
-</table>
+| AI Provider | Link |
+| :--- | :--- |
+| **Gemini** | [Google AI Studio](https://aistudio.google.com/) |
+| **OpenAI** | [OpenAI Platform](https://platform.openai.com/) |
+| **Anthropic** | [Anthropic](https://www.anthropic.com/) |
+| **DeepSeek** | [DeepSeek](https://deepseek.com/) |
+| **Ollama** | [Ollama](https://ollama.com/) |
+| **Grok** | [x.ai](https://x.ai/) |
 
 ---
 
@@ -142,7 +73,5 @@ Deploy the `aiops_backend` folder as a standard Python Web Service.
 
 ---
 
-## Credits & License
-Calyx is built upon the robust dashboard templates, workflow components, and provider abstractions originally open-sourced by **[Keep (keephq/keep)](https://github.com/keephq/keep)**.
-
+## License
 Licensed under the MIT License.
